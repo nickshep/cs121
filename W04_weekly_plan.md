@@ -11,8 +11,8 @@ See Issues 1-4
 ![](https://i.imgur.com/ir0A1ss.png)
 
 ## Stretch Task
-New account creation in app
-Use Spotify API to create new empty playlist (after user login & Spotify API integration)
+* New account creation in app
+* Use Spotify API to create new empty playlist (after user login & Spotify API integration)
 
 ## Backlog
 See: [here](https://docs.google.com/document/d/1dNpKkP6-cT1wHbiCkSyPnnrPagp8rXVfpdTVOiYwgqQ/edit?usp=sharing)
