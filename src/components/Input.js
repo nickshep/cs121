@@ -18,7 +18,7 @@ const styles = {
     margin: 9,
     padding: 9,
     paddingTop: 14,
-    borderColor: '#fff',
+    borderColor: '#D3D3D3',
     height: 50,
     flex: 3,
     flexDirection: "row",

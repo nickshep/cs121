@@ -3,6 +3,8 @@ import { View, Button, Text, ActivityIndicator } from 'react-native';
 import firebase from 'firebase';
 import Input from './Input';
 
+var amountOfTries = 0
+
 // Define variables to update in order to reference and display in GUI
 export default class LoginForm extends Component {
   constructor(props) {
@@ -10,26 +12,62 @@ export default class LoginForm extends Component {
     this.state = { email: '', password: '', error: '' };
   }
 
-  onButtonPress() {
+  login() {
     this.setState({ error: '', loading: true })
     const { email, password } = this.state;
-    // Submit login information to the Firebase database in compare to server
+    // Submit login information to the Firebase database to try to find user
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(this.onLoginSuccess.bind(this))
-      .catch(() => {
+      
+          // If there is an error print error message
+          .catch((error) => {
+            let errorCode = error.code;
+            let errorMessage = error.message;
+            if (errorCode == 'auth/invalid-email') {
+              this.onLoginFailure.bind(this)('Please enter a valid email.')
+            }
+            else if (errorCode == 'auth/wrong-password') {
+              this.onLoginFailure.bind(this)('Incorrect password attempt. Please try again.')
+              // make sure there aren't too many invalid attempts: offer reset
+              amountOfTries++;
+              if (amountOfTries > 1) {
+                this.onLoginFailure.bind(this)('Looks like you forgot your password...')
+              }
+
+            }
+            else if (errorCode == 'auth/user-not-found') {
+              this.onLoginFailure.bind(this)('We couldn\'t find an account with that email.')
+            } 
+            else {
+              this.onLoginFailure.bind(this)(errorMessage)
+            }
+          });
+  }
+
+  createAccount() {
+    this.setState({ error: '', loading: true })
+    const { email, password } = this.state;
+    // Submit login information to the Firebase database to create new user
+    // Check to make sure that they don't already have an account
         firebase.auth().createUserWithEmailAndPassword(email, password)
           .then(this.onLoginSuccess.bind(this))
           // If there is an error print error message
           .catch((error) => {
             let errorCode = error.code
             let errorMessage = error.message;
-            if (errorCode == 'auth/weak-password') {
-              this.onLoginFailure.bind(this)('Weak password!')
-            } else {
-              this.onLoginFailure.bind(this)(errorMessage)
+            if (errorCode == 'auth/email-already-in-use') {
+              this.onLoginFailure.bind(this)('You already have an account. Try logging in.')
             }
+            else if (errorCode == 'auth/invalid-email') {
+              this.onLoginFailure.bind(this)('Please enter a valid email.')
+            }
+            else if (errorCode == 'auth/weak-password') {
+              this.onLoginFailure.bind(this)('Password must be greater than 5 characters.')
+            }
+            else {
+            this.onLoginFailure.bind(this)(errorCode)
+          }
           });
-      });
   }
 
   // Update variable to move us to the home screen
@@ -55,8 +93,26 @@ export default class LoginForm extends Component {
     } else {
       return (
         <Button
-          title="Sign in / Create Account"
-          onPress={this.onButtonPress.bind(this)}
+          title="Log In"
+          onPress={this.login.bind(this)}
+        />
+      )
+    }
+  }
+
+  // Display button and search for presses
+  renderButton2() {
+    if (this.state.loading) {
+      return (
+        <View style={styles.createButtonStyle}>
+          <ActivityIndicator size={"small"} />
+        </View>
+      )
+    } else {
+      return (
+        <Button
+          title="Create Account"
+          onPress={this.createAccount.bind(this)}
         />
       )
     }
@@ -66,18 +122,19 @@ export default class LoginForm extends Component {
     return (
       <View>
         <Input label="Email"
-          placeholder="user@mail.com"
+          placeholder="colleen@CS.com"
           value={this.state.email}
           secureTextEntry={false}
           onChangeText={email => this.setState({ email })} />
 
         <Input label="Password"
-          placeholder="password"
+          placeholder="team123"
           value={this.state.password}
           secureTextEntry={true}
           onChangeText={password => this.setState({ password })} />
 
         {this.renderButton()}
+        {this.renderButton2()}
         
         <Text style={styles.errorTextStyle}>
           {this.state.error}
@@ -97,5 +154,10 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  createButtonStyle: {
+      position: 'absolute',
+      bottom:0,
+      left:0,
   }
 }

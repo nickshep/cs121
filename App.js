@@ -4,10 +4,10 @@ import firebase from 'firebase';
 import Header from './src/components/Header';
 import LoginForm from './src/components/LoginForm';
 
-
 export default class App extends Component {
   state = { loggedIn: null };
 
+  // note: do not add real config info till launch (one app is secured and in closed repository)
   componentDidMount() {
     let config = {
       apiKey: "AIzaSyDvk0jhmBxYZ-zKlnH-AjlwRD_ncC5J8fI",
