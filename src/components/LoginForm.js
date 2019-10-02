@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Button, Text, ActivityIndicator } from 'react-native';
+import { View, Button, Text, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import firebase from 'firebase';
 import Input from './Input';
 
 var amountOfTries = 0
+
 
 // Define variables to update in order to reference and display in GUI
 export default class LoginForm extends Component {
@@ -104,13 +105,14 @@ export default class LoginForm extends Component {
   renderButton2() {
     if (this.state.loading) {
       return (
-        <View style={styles.createButtonStyle}>
+        <View style={styles.bottomView}>
           <ActivityIndicator size={"small"} />
         </View>
       )
     } else {
       return (
         <Button
+          type = "outline"
           title="Create Account"
           onPress={this.createAccount.bind(this)}
         />
@@ -149,6 +151,15 @@ const styles = {
     fontSize: 16,
     alignSelf: 'center',
     color: 'red'
+  },
+  bottomView:{
+    width: '100%', 
+    height: 50, 
+    backgroundColor: '#FF9800', 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0
   },
   spinnerStyle: {
     flex: 1,
