@@ -3,8 +3,8 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://nk-ycz.nickshep.cs121-team7nick.exp.direct",
+  "packagerNgrokUrl": "https://packager.nk-ycz.nickshep.cs121-team7nick.exp.direct",
+  "ngrokPid": 8526,
   "webpackServerPort": null
 }
