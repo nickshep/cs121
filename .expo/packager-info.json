@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 8678,
   "expoServerNgrokUrl": "https://nk-ycz.nickshep.cs121-team7nick.exp.direct",
   "packagerNgrokUrl": "https://packager.nk-ycz.nickshep.cs121-team7nick.exp.direct",
-  "ngrokPid": 8526,
+  "ngrokPid": 8686,
   "webpackServerPort": null
 }
