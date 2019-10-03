@@ -59,6 +59,7 @@ export default class LoginForm extends Component {
     })
 }
 
+// makes account
   createAccount() {
     this.setState({ error: '', loadingB: true })
     const { email, password } = this.state;
