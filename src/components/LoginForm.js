@@ -4,7 +4,7 @@ import firebase from 'firebase';
 import Input from './Input';
 
 var amountOfTries = 0
-
+var spotifyToken = "694579933"
 
 // Define variables to update in order to reference and display in GUI
 export default class LoginForm extends Component {
@@ -14,7 +14,7 @@ export default class LoginForm extends Component {
   }
 
   login() {
-    this.setState({ error: '', loading: true })
+    this.setState({ error: '', loadingA: true })
     const { email, password } = this.state;
     // Submit login information to the Firebase database to try to find user
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -45,8 +45,22 @@ export default class LoginForm extends Component {
           });
   }
 
+  // adds users to database along with their Spotify token
+  writeUserData(email,spotifyToken){
+    firebase.database().ref(databaseURL).push({
+        email,
+        spotifyToken
+    }).then((data)=>{
+        //success callback
+        console.log('data ' , data)
+    }).catch((error)=>{
+        //error callback
+        console.log('error ' , error)
+    })
+}
+
   createAccount() {
-    this.setState({ error: '', loading: true })
+    this.setState({ error: '', loadingB: true })
     const { email, password } = this.state;
     // Submit login information to the Firebase database to create new user
     // Check to make sure that they don't already have an account
@@ -69,23 +83,26 @@ export default class LoginForm extends Component {
             this.onLoginFailure.bind(this)(errorCode)
           }
           });
+
+          this.writeUserData.bind(email,spotifyToken)
+      
   }
 
   // Update variable to move us to the home screen
   onLoginSuccess() {
     this.setState({
-      email: '', password: '', error: '', loading: false
+      email: '', password: '', error: '', loadingA: false, loadingB: false
     })
   }
 
   // Stop loading screen and print error
   onLoginFailure(errorMessage) {
-    this.setState({ error: errorMessage, loading: false })
+    this.setState({ error: errorMessage, loadingA: false, loadingB: false })
   }
 
   // Display button and search for presses
   renderButton() {
-    if (this.state.loading) {
+    if (this.state.loadingA) {
       return (
         <View style={styles.spinnerStyle}>
           <ActivityIndicator size={"small"} />
@@ -103,9 +120,9 @@ export default class LoginForm extends Component {
 
   // Display button and search for presses
   renderButton2() {
-    if (this.state.loading) {
+    if (this.state.loadingB) {
       return (
-        <View style={styles.bottomView}>
+        <View style={styles.spinnerStyle}>
           <ActivityIndicator size={"small"} />
         </View>
       )
@@ -153,8 +170,8 @@ const styles = {
     color: 'red'
   },
   bottomView:{
-    width: '100%', 
-    height: 50, 
+    width: '0%', 
+    height: 300, 
     backgroundColor: '#FF9800', 
     justifyContent: 'center', 
     alignItems: 'center',
